@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup><UserSecretsId>serveflow-web-development</UserSecretsId></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ServeFlow.Application/ServeFlow.Application.csproj" />
+    <ProjectReference Include="../ServeFlow.Infrastructure/ServeFlow.Infrastructure.csproj" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="QRCoder" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

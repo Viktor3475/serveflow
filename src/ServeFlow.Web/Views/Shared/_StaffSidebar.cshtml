@@ -1,0 +1,20 @@
+@using ServeFlow.Application.Security
+@{ var current = ViewContext.RouteData.Values["controller"]?.ToString(); }
+<aside id="staff-sidebar" class="staff-sidebar" aria-label="Staff navigation">
+    <button id="sidebar-close" class="sidebar-close btn btn-outline-secondary" type="button" aria-label="Close navigation">×</button>
+    <a class="brand sidebar-brand" asp-controller="Home" asp-action="Index"><span class="brand-mark" aria-hidden="true">S</span> ServeFlow<span class="brand-subtitle">Restaurant workspace</span></a>
+    <span class="sidebar-label">Workspace</span><nav class="sidebar-links" aria-label="Restaurant navigation">
+    @if (User.IsInRole(StaffRoles.Administrator)) { <a asp-controller="Dashboard" asp-action="Index" class="@(current == "Dashboard" ? "active" : "")" aria-current="@(current == "Dashboard" ? "page" : null)"><span aria-hidden="true">◫</span> Overview</a> }
+    <a asp-controller="Operations" asp-action="Index" class="@(current == "Operations" ? "active" : "")" aria-current="@(current == "Operations" ? "page" : null)"><span aria-hidden="true">▤</span> Live orders</a>
+    @if (User.IsInRole(StaffRoles.Administrator) || User.IsInRole(StaffRoles.KitchenStaff)) { <a asp-controller="Kitchen" asp-action="Index" class="@(current == "Kitchen" ? "active" : "")" aria-current="@(current == "Kitchen" ? "page" : null)"><span aria-hidden="true">◉</span> Kitchen queue</a> }
+    @if (User.IsInRole(StaffRoles.Administrator) || User.IsInRole(StaffRoles.Waiter)) { <a asp-controller="Tables" asp-action="Index" class="@(current == "Tables" ? "active" : "")" aria-current="@(current == "Tables" ? "page" : null)"><span aria-hidden="true">▦</span> Tables</a> }
+    @if (User.IsInRole(StaffRoles.Administrator))
+    {
+        <span class="sidebar-label mt-3">Management</span>
+        <a asp-controller="Menu" asp-action="Index" class="@(current is "Menu" or "Options" ? "active" : "")" aria-current="@(current is "Menu" or "Options" ? "page" : null)"><span aria-hidden="true">☷</span> Menu &amp; products</a>
+        <a asp-controller="Categories" asp-action="Index" class="@(current == "Categories" ? "active" : "")" aria-current="@(current == "Categories" ? "page" : null)"><span aria-hidden="true">◇</span> Categories</a>
+        <a asp-controller="Employees" asp-action="Index" class="@(current == "Employees" ? "active" : "")" aria-current="@(current == "Employees" ? "page" : null)"><span aria-hidden="true">♧</span> Team</a>
+        <a asp-controller="Restaurant" asp-action="Index" class="@(current == "Restaurant" ? "active" : "")" aria-current="@(current == "Restaurant" ? "page" : null)"><span aria-hidden="true">⚙</span> Restaurant settings</a>
+    }
+    </nav><div class="sidebar-bottom"><span class="status-dot" aria-hidden="true"></span><span>Your service, in sync.</span></div>
+</aside>

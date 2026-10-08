@@ -1,0 +1,7 @@
+@{ ViewData["Title"] = ViewData["KitchenMode"] is true ? "Kitchen queue" : "Live orders"; }
+<div class="management-heading"><div><span class="eyebrow">Restaurant operations</span><h1 class="h2 mt-2">@ViewData["Title"]</h1><p id="queue-count" class="text-body-secondary"></p></div><button id="refresh-queue" type="button" class="btn btn-outline-success">Refresh queue</button></div>
+<p id="live-state" role="status" class="text-body-secondary">Connecting to live updates…</p><p id="queue-message" role="alert" class="text-danger"></p>
+<div id="order-queue" class="row g-4"></div>@Html.AntiForgeryToken()
+<script src="~/lib/signalr/signalr.min.js" asp-append-version="true" defer></script>
+<script src="~/js/order-live.js" asp-append-version="true" defer></script>
+<script src="~/js/operations.js" asp-append-version="true" defer></script>

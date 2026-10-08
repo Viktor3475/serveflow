@@ -1,0 +1,8 @@
+@model ServeFlow.Application.Management.ManagementPage<ServeFlow.Application.Management.MenuDetails>
+@{ ViewData["Title"] = "Menu management"; var paging = new ServeFlow.Web.Models.PagingModel(Model.Page, Model.TotalPages, Model.Search, Model.IncludeArchived); }
+<div class="management-heading"><div><span class="eyebrow">Made for your guests</span><h1 class="h2 mt-2">Menu management</h1></div><a asp-action="Create" class="btn btn-success">Add product</a></div>
+<partial name="_ManagementFilter" model="paging" />
+<div class="feature-card table-responsive"><table class="table align-middle"><caption>@Model.TotalCount products found</caption><thead><tr><th scope="col">Product</th><th scope="col">Category</th><th scope="col">Price</th><th scope="col">Availability</th><th scope="col">Actions</th></tr></thead><tbody>
+@foreach (var item in Model.Items) { <tr><td><div class="d-flex align-items-center gap-3">@if (item.HasImage) { <img asp-append-version="false" src="@Url.Action("Show", "ProductImages", new { id = item.Id })" class="menu-thumbnail" alt="" loading="lazy" /> }<span>@item.Name</span></div></td><td>@item.CategoryName</td><td>@item.Price.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) @Model.CurrencyCode</td><td><span class="badge @(item.IsAvailable && !item.IsArchived ? "text-bg-success" : "text-bg-secondary")">@(item.IsArchived ? "Archived" : item.IsAvailable ? "Available" : "Unavailable")</span></td><td><a asp-action="Edit" asp-route-id="@item.Id">Edit <span class="visually-hidden">@item.Name</span></a></td></tr> }
+</tbody></table>@if (Model.Items.Count == 0) { <p>No products match these filters.</p> }</div>
+<partial name="_ManagementPaging" model="paging" />

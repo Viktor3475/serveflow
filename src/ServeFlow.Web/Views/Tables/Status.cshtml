@@ -1,0 +1,8 @@
+@model ServeFlow.Web.Models.TableStatusModel
+@{ ViewData["Title"] = "Change table status"; }
+<div class="account-card mx-auto"><h1 class="h2 mb-4">Table @Model.Number</h1>
+<form asp-action="Status" asp-route-id="@Model.Id" method="post">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="Id" type="hidden" /><input asp-for="Version" type="hidden" />
+    <div class="mb-4"><label asp-for="Status" class="form-label"></label><select asp-for="Status" asp-items="Html.GetEnumSelectList<ServeFlow.Domain.Enums.TableStatus>()" class="form-select"></select><div class="form-text">Tables with active orders must remain occupied.</div></div>
+    <button class="btn btn-success" type="submit">Update status</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form></div>

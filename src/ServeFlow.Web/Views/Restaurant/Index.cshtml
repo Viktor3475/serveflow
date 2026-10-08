@@ -1,0 +1,10 @@
+@model ServeFlow.Web.Models.RestaurantSettingsModel
+@{ ViewData["Title"] = "Restaurant settings"; }
+<div class="account-card mx-auto"><span class="eyebrow">Your restaurant</span><h1 class="h2 mt-2 mb-4">Restaurant settings</h1>
+<form asp-action="Index" method="post">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="Version" type="hidden" />
+    <div class="mb-3"><label asp-for="Name" class="form-label">Restaurant name</label><input asp-for="Name" class="form-control" required /></div>
+    <div class="mb-3"><label for="currency" class="form-label">Currency</label><input id="currency" value="@Model.CurrencyCode" class="form-control" readonly /><div class="form-text">Currency is fixed to keep your menu prices and historical orders consistent.</div></div>
+    <div class="mb-4"><label asp-for="TimeZoneId" class="form-label"></label><select asp-for="TimeZoneId" class="form-select">@foreach (var zone in TimeZoneInfo.GetSystemTimeZones()) { <option value="@zone.Id">@zone.DisplayName (@zone.Id)</option> }</select></div>
+    <button type="submit" class="btn btn-success">Save settings</button>
+</form></div>

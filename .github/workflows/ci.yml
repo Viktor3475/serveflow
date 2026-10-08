@@ -1,0 +1,58 @@
+name: Build, SQL tests and containers
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CONTAINER_ENGINE: docker
+      DOTNET_NOLOGO: 'true'
+      DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+      - run: dotnet restore ServeFlow.sln --locked-mode
+      - run: dotnet tool restore
+      - run: dotnet build ServeFlow.sln -c Release --no-restore
+      - name: Check JavaScript and shell syntax
+        run: |
+          for file in src/ServeFlow.Web/wwwroot/js/*.js; do node --check "$file"; done
+          bash -n scripts/*.sh
+      - name: Check migration completeness
+        run: dotnet ef migrations has-pending-model-changes --project src/ServeFlow.Infrastructure --startup-project src/ServeFlow.Web -c Release --no-build
+      - name: Full suite with real SQL Server
+        run: scripts/test-sqlserver.sh --no-build
+      - name: Build runtime and migration images
+        run: |
+          docker build --target runtime -t localhost/serveflow:phase8 .
+          docker build --target migrations -t localhost/serveflow-migrations:phase8 .
+      - name: Container migration and HTTPS smoke check
+        run: scripts/smoke-containers.sh
+      - name: Prepare reviewable release artifacts
+        run: |
+          dotnet publish src/ServeFlow.Web -c Release --no-restore -o artifacts/web
+          docker create --name serveflow-bundle-export localhost/serveflow-migrations:phase8
+          docker cp serveflow-bundle-export:/app/efbundle artifacts/efbundle
+          docker rm serveflow-bundle-export
+          cp docs/database/ServeFlowSchema.sql artifacts/
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: serveflow-${{ github.sha }}
+          path: artifacts/
+          retention-days: 14
+          if-no-files-found: error

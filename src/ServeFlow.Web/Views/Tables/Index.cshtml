@@ -1,0 +1,12 @@
+@model ServeFlow.Application.Management.ManagementPage<ServeFlow.Application.Management.TableDetails>
+@using ServeFlow.Application.Security
+@{ ViewData["Title"] = "Tables"; var admin = User.IsInRole(StaffRoles.Administrator); var paging = new ServeFlow.Web.Models.PagingModel(Model.Page, Model.TotalPages, "", Model.IncludeArchived); }
+<div class="management-heading"><div><span class="eyebrow">The dining room</span><h1 class="h2 mt-2">Restaurant tables</h1></div>@if (admin) { <a asp-action="Create" class="btn btn-success">Add table</a> }</div>
+<form method="get" asp-action="Index" class="d-flex gap-3 align-items-center mb-4"><div class="form-check"><input id="include-archived" type="checkbox" name="includeArchived" value="true" checked="@(Model.IncludeArchived ? "checked" : null)" class="form-check-input" /><label for="include-archived" class="form-check-label">Include archived</label></div><button class="btn btn-outline-secondary btn-sm" type="submit">Apply filter</button></form>
+<div class="row g-4">
+@foreach (var table in Model.Items)
+{
+    <div class="col-sm-6 col-lg-4"><article class="feature-card"><div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h4 m-0">Table @table.Number</h2><span class="badge @(table.IsArchived ? "text-bg-secondary" : table.Status == ServeFlow.Domain.Enums.TableStatus.Available ? "text-bg-success" : table.Status == ServeFlow.Domain.Enums.TableStatus.Occupied ? "text-bg-warning" : "text-bg-primary")">@(table.IsArchived ? "Archived" : table.Status.ToString())</span></div><p class="mb-4">@table.Capacity seats</p><div class="d-flex gap-3 flex-wrap">@if (!table.IsArchived) { <a asp-controller="WaiterOrder" asp-action="Index" asp-route-id="@table.Id">Create order<span class="visually-hidden"> for table @table.Number</span></a> }@if (admin && !table.IsArchived) { <a asp-controller="TableQr" asp-action="Index" asp-route-id="@table.Id">QR code<span class="visually-hidden"> for table @table.Number</span></a> }@if (!table.IsArchived) { <a asp-action="Status" asp-route-id="@table.Id">Change status<span class="visually-hidden"> for table @table.Number</span></a> }@if (admin) { <a asp-action="Edit" asp-route-id="@table.Id">Edit<span class="visually-hidden"> table @table.Number</span></a> }</div></article></div>
+}
+</div>@if (Model.Items.Count == 0) { <p>No tables match this filter.</p> }
+<partial name="_ManagementPaging" model="paging" />

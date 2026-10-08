@@ -1,0 +1,9 @@
+@model ServeFlow.Web.Controllers.DiningPage
+@{ ViewData["Title"] = "Digital menu"; }
+<div id="dining-app" data-menu-url="@Model.MenuUrl" data-order-url="@Model.OrderUrl" data-image-url="@Model.ImageUrl">
+    <div class="management-heading"><div><span class="eyebrow" id="table-label">Your table</span><h1 class="h2 mt-2" id="restaurant-name">Digital menu</h1></div><button id="refresh-menu" type="button" class="btn btn-outline-secondary">Refresh menu</button></div>
+    <p id="dining-message" class="text-danger" role="alert"></p>
+    <div class="row g-4"><div class="col-lg-8"><div class="row g-3 mb-4"><div class="col-sm-7"><label for="menu-search" class="form-label">Find a dish</label><input id="menu-search" type="search" class="form-control" placeholder="Search the menu" maxlength="100" /></div><div class="col-sm-5"><label for="menu-category" class="form-label">Category</label><select id="menu-category" class="form-select"><option value="">All categories</option></select></div></div><div id="menu-items" class="row g-4"></div></div>
+    <aside class="col-lg-4"><div class="feature-card dining-cart"><h2 class="h4">Your order</h2><div id="cart-lines"></div><label for="order-notes" class="form-label mt-3">Order notes</label><textarea id="order-notes" class="form-control" maxlength="1000" rows="2"></textarea><div class="d-flex justify-content-between my-4"><strong>Total</strong><strong id="cart-total">—</strong></div><p class="form-text">Final prices are verified when you submit. Your order is sent to the restaurant; payment is handled separately.</p><button id="place-order" type="button" class="btn btn-success w-100">Send order</button>@Html.AntiForgeryToken()</div></aside></div>
+</div>
+<script src="~/js/dining-menu.js" asp-append-version="true" defer></script>

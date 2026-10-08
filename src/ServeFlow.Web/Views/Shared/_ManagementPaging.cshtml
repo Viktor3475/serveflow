@@ -1,0 +1,6 @@
+@model ServeFlow.Web.Models.PagingModel
+<nav aria-label="Pagination" class="d-flex align-items-center gap-3 mt-4">
+@if (Model.Page > 1) { <a asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-search="@Model.Search" asp-route-includeArchived="@Model.IncludeArchived" class="btn btn-outline-secondary btn-sm">Previous</a> }
+<span class="text-body-secondary">Page @Model.Page of @Model.TotalPages</span>
+@if (Model.Page < Model.TotalPages) { <a asp-action="Index" asp-route-page="@(Model.Page + 1)" asp-route-search="@Model.Search" asp-route-includeArchived="@Model.IncludeArchived" class="btn btn-outline-secondary btn-sm">Next</a> }
+</nav>

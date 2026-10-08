@@ -1,0 +1,11 @@
+@model IReadOnlyList<ServeFlow.Application.Accounts.EmployeeSummary>
+@{ ViewData["Title"] = "Employees"; }
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4"><div><span class="eyebrow">Your team</span><h1 class="h2 mt-2">Employee accounts</h1></div><a asp-action="Create" class="btn btn-success">Add employee</a></div>
+<div class="feature-card table-responsive"><table class="table align-middle"><caption>Staff accounts in your restaurant. Showing up to 500 accounts.</caption><thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Role</th><th scope="col">Access</th><th scope="col">Actions</th></tr></thead><tbody>
+@foreach (var employee in Model)
+{
+    <tr><td>@employee.DisplayName</td><td>@employee.Email</td><td>@employee.Role</td><td><span class="badge @(employee.IsArchived ? "text-bg-secondary" : "text-bg-success")">@(employee.IsArchived ? "Archived" : "Active")</span></td><td><a asp-action="Edit" asp-route-id="@employee.Id" aria-label="Edit @employee.DisplayName">Edit</a></td></tr>
+}
+</tbody></table>
+@if (Model.Count == 0) { <p class="text-body-secondary">No employee accounts found.</p> }
+</div>

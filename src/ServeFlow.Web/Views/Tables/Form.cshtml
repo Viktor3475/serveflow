@@ -1,0 +1,11 @@
+@model ServeFlow.Web.Models.TableModel
+@{ var editing = Model.Id != Guid.Empty; ViewData["Title"] = editing ? "Edit table" : "Add table"; }
+<div class="account-card mx-auto"><h1 class="h2 mb-4">@ViewData["Title"]</h1>
+<form asp-action="@(editing ? "Edit" : "Create")" asp-route-id="@(editing ? Model.Id : (Guid?)null)" method="post">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="Id" type="hidden" /><input asp-for="Version" type="hidden" />
+    <div class="mb-3"><label asp-for="Number" class="form-label"></label><input asp-for="Number" class="form-control" min="1" max="10000" /></div>
+    <div class="mb-3"><label asp-for="Capacity" class="form-label"></label><input asp-for="Capacity" class="form-control" min="1" max="100" /></div>
+    <div class="mb-4"><label asp-for="Status" class="form-label"></label><select asp-for="Status" asp-items="Html.GetEnumSelectList<ServeFlow.Domain.Enums.TableStatus>()" class="form-select"></select></div>
+    @if (editing) { <div class="form-check mb-4"><input asp-for="IsArchived" class="form-check-input" /><label asp-for="IsArchived" class="form-check-label"></label><div class="form-text">Only available tables without active orders can be archived.</div></div> }
+    <button class="btn btn-success" type="submit">Save table</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form></div>

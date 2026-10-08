@@ -1,0 +1,8 @@
+@model ServeFlow.Application.Management.ManagementPage<ServeFlow.Application.Management.CategoryDetails>
+@{ ViewData["Title"] = "Categories"; var paging = new ServeFlow.Web.Models.PagingModel(Model.Page, Model.TotalPages, Model.Search, Model.IncludeArchived); }
+<div class="management-heading"><div><span class="eyebrow">Organize your menu</span><h1 class="h2 mt-2">Categories</h1></div><a asp-action="Create" class="btn btn-success">Add category</a></div>
+<partial name="_ManagementFilter" model="paging" />
+<div class="feature-card table-responsive"><table class="table align-middle"><caption>@Model.TotalCount categories found</caption><thead><tr><th scope="col">Category</th><th scope="col">Display order</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead><tbody>
+@foreach (var item in Model.Items) { <tr><td>@item.Name</td><td>@item.SortOrder</td><td>@(item.IsArchived ? "Archived" : "Active")</td><td><a asp-action="Edit" asp-route-id="@item.Id">Edit <span class="visually-hidden">@item.Name</span></a></td></tr> }
+</tbody></table>@if (Model.Items.Count == 0) { <p>No categories match these filters.</p> }</div>
+<partial name="_ManagementPaging" model="paging" />

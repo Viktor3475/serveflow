@@ -1,0 +1,6 @@
+@model Guid
+@{ ViewData["Title"] = "Your order"; }
+<div id="receipt-app" data-order-id="@Model" class="feature-card mx-auto dining-receipt"><span class="eyebrow">Order receipt</span><h1 class="h2 mt-3" id="receipt-number">Your order</h1><p id="receipt-message" role="alert">Loading receipt…</p><p id="receipt-table"></p><span id="receipt-status" class="badge text-bg-success"></span><ul id="receipt-lines" class="list-unstyled mt-4"></ul><p id="receipt-notes"></p><p class="h4" id="receipt-total"></p><p id="live-state" class="text-body-secondary" role="status">Connecting to live updates…</p><p class="form-text">Keep this private link to check your order. Payment is handled separately.</p><button id="refresh-receipt" class="btn btn-outline-success" type="button">Refresh status</button> <a asp-action="Index" class="btn btn-outline-secondary">Back to menu</a></div>
+<script src="~/lib/signalr/signalr.min.js" asp-append-version="true" defer></script>
+<script src="~/js/order-live.js" asp-append-version="true" defer></script>
+<script src="~/js/dining-receipt.js" asp-append-version="true" defer></script>

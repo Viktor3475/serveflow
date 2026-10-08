@@ -1,0 +1,4 @@
+@model ServeFlow.Web.Controllers.OptionPage
+@{ ViewData["Title"] = "Product options"; }
+<div class="management-heading"><h1 class="h2">Product options</h1><a asp-action="Edit" asp-route-id="@Model.ItemId" class="btn btn-success">Add option</a></div><p>Each selected option adds its price per item. Archived or unavailable options cannot be ordered.</p>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Option</th><th>Additional price</th><th>Status</th><th></th></tr></thead><tbody>@foreach (var option in Model.Options) { <tr><td>@option.Name</td><td>@option.Price.ToString("0.00")</td><td>@(option.Archived ? "Archived" : option.Available ? "Available" : "Unavailable")</td><td><a asp-action="Edit" asp-route-id="@Model.ItemId" asp-route-optionId="@option.Id">Edit<span class="visually-hidden"> @option.Name</span></a></td></tr> }</tbody></table></div><a asp-controller="Menu" asp-action="Edit" asp-route-id="@Model.ItemId">Back to product</a>

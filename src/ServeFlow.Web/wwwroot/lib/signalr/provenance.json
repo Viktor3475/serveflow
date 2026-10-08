@@ -1,0 +1,12 @@
+{
+  "package": "@microsoft/signalr",
+  "version": "10.0.11",
+  "source": "https://registry.npmjs.org/@microsoft/signalr/-/signalr-10.0.11.tgz",
+  "integrity": "sha512-FulOJ2EEtKvLQcswe/U7v8pzyXyk7Jua5xgWJPPwyQU/2Z9ORvKcVjyO75VvLsem+CJ1ORRexJ+7Bz1FCei2aw==",
+  "licenseSource": "https://github.com/dotnet/aspnetcore/blob/v10.0.11/LICENSE.txt",
+  "sha256": {
+    "LICENSE.txt": "cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310",
+    "signalr.min.js": "97e9b97e642a72e5a470917147a2bf79f86cad829a5c6786adb10614d248bb95",
+    "signalr.min.js.map": "4a28abdfffd30d13d3012726b5a22c38ab475292fbb59ad947698f3c607e6024"
+  }
+}

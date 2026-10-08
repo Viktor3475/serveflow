@@ -1,0 +1,25 @@
+@model ServeFlow.Web.Models.MenuModel
+@{ var editing = Model.Id != Guid.Empty; ViewData["Title"] = editing ? "Edit product" : "Add product"; }
+<div class="row g-4"><div class="col-lg-7"><div class="feature-card"><h1 class="h2 mb-4">@ViewData["Title"]</h1>
+@if (!Model.CategoryChoices.Any(x => !x.IsArchived)) { <div class="alert alert-info">Create an active category before adding or restoring products. <a asp-controller="Categories" asp-action="Create">Add category</a></div> }
+<form asp-action="@(editing ? "Edit" : "Create")" asp-route-id="@(editing ? Model.Id : (Guid?)null)" method="post">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div><input asp-for="Id" type="hidden" /><input asp-for="Version" type="hidden" />
+    <div class="mb-3"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" required /></div>
+    <div class="mb-3"><label asp-for="CategoryId" class="form-label"></label><select asp-for="CategoryId" class="form-select" required><option value="">Select a category</option>@foreach (var choice in Model.CategoryChoices.Where(x => !x.IsArchived || x.Id == Model.CategoryId)) { <option value="@choice.Id">@choice.Name @(choice.IsArchived ? "(Archived)" : "")</option> }</select></div>
+    <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control" rows="4" maxlength="2000"></textarea></div>
+    <div class="mb-3"><label asp-for="Price" class="form-label"></label><input asp-for="Price" type="number" step="0.01" min="0" max="1000000" class="form-control" required /></div>
+    <div class="form-check mb-3"><input asp-for="IsAvailable" class="form-check-input" /><label asp-for="IsAvailable" class="form-check-label"></label></div>
+    @if (editing) { <div class="form-check mb-4"><input asp-for="IsArchived" class="form-check-input" /><label asp-for="IsArchived" class="form-check-label"></label></div> }
+    <button type="submit" class="btn btn-success">Save product</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form></div></div><div class="col-lg-5"><div class="feature-card"><h2 class="h5 mb-3">Product image</h2>
+@if (editing) { <p><a asp-controller="Options" asp-action="Index" asp-route-id="@Model.Id">Manage product options</a></p> }
+@if (!editing) { <p class="text-body-secondary">Save the product first, then upload its image.</p> }
+else
+{
+    @if (Model.HasImage) { <img src="@Url.Action("Show", "ProductImages", new { id = Model.Id })" alt="Current image for @Model.Name" class="product-preview mb-3" /> }
+    <form asp-action="UploadImage" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="Version" value="@Model.Version" /><label for="product-image" class="form-label">Choose image</label><input id="product-image" name="Image" type="file" accept="image/png,image/jpeg" class="form-control mb-2" required /><p class="form-text">PNG or JPEG, up to 5 MB, 4096 pixels per side and 8 megapixels.</p><button class="btn btn-outline-success" type="submit">Upload image</button>
+    </form>
+    @if (Model.HasImage) { <form asp-action="RemoveImage" asp-route-id="@Model.Id" method="post" class="mt-3"><input type="hidden" name="Version" value="@Model.Version" /><button class="btn btn-outline-secondary" type="submit">Remove image</button></form> }
+}
+</div></div></div>
